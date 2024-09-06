@@ -1,101 +1,207 @@
-import Image from "next/image";
 
-export default function Home() {
+"use client";
+import React, { useState } from 'react';
+import { IoIosSearch } from "react-icons/io";
+import { IoBagOutline } from "react-icons/io5";
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { DownOutlined } from '@ant-design/icons';
+import { Dropdown, Space } from 'antd';
+import { GiHamburgerMenu } from "react-icons/gi";
+import { IoMdCloseCircle } from "react-icons/io";
+import ThemeControl from '@/components/ThemeControl';
+
+// Dropdown menu items for "Home"
+const items = [
+  {
+    label: (
+      <a target="_blank" rel="noopener noreferrer" href="/home1">
+        Home 1
+      </a>
+    ),
+    key: '0',
+  },
+  {
+    label: (
+      <a target="_blank" rel="noopener noreferrer" href="/home2">
+        Home 2
+      </a>
+    ),
+    key: '1',
+  },
+];
+
+const more = [
+  {
+    label: (
+      <a target="_blank" rel="noopener noreferrer" href="/home1">
+        more 1
+      </a>
+    ),
+    key: '0',
+  },
+  {
+    label: (
+      <a target="_blank" rel="noopener noreferrer" href="/home2">
+        more 2
+      </a>
+    ),
+    key: '1',
+  },
+];
+
+const Navbar = () => {
+  const router = useRouter();
+  const [activeLink, setActiveLink] = useState('Home');
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Navbar links including dropdown for "Home"
+  const links = [
+    {
+      name: 'Home',
+      dropdown: (
+        <Dropdown
+          className=''
+          menu={{
+            items,
+          }}
+        >
+          <a
+            onClick={(e) => e.preventDefault()}
+            className={`flex items-center space-x-1 ${activeLink === 'Home' ? 'text-[#E67529]' : 'text-[#2B2B2B] dark:text-white'}`}
+          >
+            <Space>
+              Home
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      ),
+    },
+    { name: 'About', path: '/about' },
+    { name: 'Services', path: '/services' },
+    { name: 'Shop', path: '/shop' },
+    { name: 'Blogs', path: '/blogs' },
+    // { name: 'More', path: '/More' },
+    {
+      name: 'Home',
+      dropdown: (
+        <Dropdown
+          className=''
+          menu={{
+            items,
+          }}
+        >
+          <a
+            onClick={(e) => e.preventDefault()}
+            className={`flex items-center space-x-1 ${activeLink === 'More' ? 'text-[#E67529]' : 'text-[#2B2B2B] dark:text-white'}`}
+          >
+            <Space>
+              More
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>
+      ),
+    },
+  ];
+
+
+
+
+  // Toggle mobile menu
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // Handle link click and set active link
+  const handleLinkClick = (linkName, path) => {
+    setActiveLink(linkName);
+    setIsOpen(false); // Close menu for mobile
+    if (path) {
+      router.push(path);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <nav className="bg-white dark:bg-[#2B2B2B] shadow-md">
+      <div className="max-w-[1320px] mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <a href="/" className="">
+          <Image src="/images/Logo.png" height={77} width={218} alt="logoImage" className='w-56 h-12' />
+        </a>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        {/* Hamburger for mobile */}
+        <div className="lg:hidden relative left-10">
+          <button
+            onClick={toggleMenu}
+            className="text-gray-600 dark:text-white focus:outline-none"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {isOpen ? (
+              <IoMdCloseCircle className="text-3xl" />
+            ) : (
+              <GiHamburgerMenu className="text-3xl" />
+            )}
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {/* Links for larger screens */}
+        <div className={`hidden lg:flex items-center text-[#2B2B2B] dark:text-white font-noto text-[18px] font-medium space-x-10 ml-[346px]`}>
+          {links.map((link, index) => (
+            <div key={index}>
+              {link.dropdown ? (
+                // Dropdown for Home and more
+                <div
+                  onClick={() => setActiveLink(link.name)}
+                >
+                  {link.dropdown}
+                </div>
+              ) : (
+                <a
+                  href={link.path}
+                  className={`font-noto text-[18px] font-medium ${activeLink === link.name ? 'text-[#E67529]' : 'text-[#2B2B2B] dark:text-white'}`}
+                  onClick={() => handleLinkClick(link.name, link.path)}
+                >
+                  {link.name}
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+        <ThemeControl />
+        {/* Join Us button */}
+        <div className="flex items-center ml-10 md:ml-20">
+          <button
+            className="border-2 border-[#E67529] px-8 py-4 rounded-[4px] whitespace-pre font-noto text-[18px] font-medium hover:bg-[#E67529] hover:text-white text-[#2B2B2B] dark:text-white transition"
+          >
+            Join Us
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile view dropdown (only vertical on small screens) */}
+      {isOpen && (
+        <div className="lg:hidden flex flex-col items-start bg-[#2D2E31] shadow-md px-4 space-y-4 text-white font-noto text-[18px] font-medium">
+          {links.map((link, index) => (
+            <div key={index}>
+              {link.dropdown ? (
+                // Mobile dropdown for Home
+                link.dropdown
+              ) : (
+                <a
+                  href={link.path}
+                  className={`text-[18px] w-full text-left ${activeLink === link.name ? 'text-[#E67529]' : 'text-[#2B2B2B] dark:text-white'}`}
+                  onClick={() => handleLinkClick(link.name, link.path)}
+                >
+                  {link.name}
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </nav>
   );
-}
+};
+
+export default Navbar;
